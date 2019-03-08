@@ -2,9 +2,14 @@
 
 import psycopg2
 
+# VIEWS
+#
+# create view article_view as select author,title,count(*) as views from articles,log where log.path like concat('%',articles.slug) group by articles.title,articles.author order by views desc;
+#
+
 question1 = ("What are the three most popular articles of all time?")
 query1 = (
-    "select * from articles;"
+    "select title,views from article_view limit 3;"
 )
 
 question2 = ("Who are the most popular article authors of all time?")
@@ -30,7 +35,7 @@ def results(query):
 def print_results(query_results):
     print (query_results[1])
     for index, results in enumerate(query_results[0]):
-        print ("Index: ", index, str(results[1]))
+        print (str(results[0] + " - " + str(results[1]) + " views."))
 
 if __name__ == '__main__':
     popular_articles = results(query1), question1
