@@ -54,5 +54,5 @@ vagrant@vagrant:/vagrant/logs-analysis
 ```
 3. Run the script:
 ```
-vagrant@vagrant:/vagrant/logs-analysis python source.py
+vagrant@vagrant:/vagrant/logs-analysis python3 source.py
 ```
