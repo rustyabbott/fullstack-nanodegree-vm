@@ -41,9 +41,9 @@ vagrant@vagrant:/vagrant psql -d news
 create view article_view as select author,title,count(*) as views from articles,log where log.path like concat('%',articles.slug) group by articles.title,articles.author order by views desc;
 ```
 
-2. Create log_view:
+2. Create new_log_view:
 ```
-create view log_view as select date(time),round(100.0*sum(case log.status when '200 OK' then 0 else 1 end)/count(log.status),2) as "Percent Error" from log group by date(time) order by "Percent Error" desc;
+create view new_log_view as select date(time),round(100.0*sum(case log.status when '200 OK' then 0 else 1 end)/count(log.status),2) as "error rate" from log group by date(time) order by "error rate" desc;
 ```
 
 ### Display the Output
