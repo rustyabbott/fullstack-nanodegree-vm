@@ -25,13 +25,22 @@ query2 = ("""
 
 # Create new_log_view
 #
-# create view new_log_view as select date(time),round(100.0*sum(case log.status when '200 OK' then 0 else 1 end)/count(log.status),2) as "error rate" from log group by date(time) order by "error rate" desc;
+# create view new_log_view as
+#   select date(time),round(100.0*sum(case
+#       log.status when '200 OK' then 0 else 1 end)/
+#       count(log.status),2) as "error rate"
+#       from log
+#       group by date(time)
+#       order by "error rate" desc;
 
 question3 = ("On which days did more than 1% of requests lead to errors?")
 query3 = ("select * from new_log_view where \"error rate\" > 1;")
 
 
 def connect(database="news"):
+    """
+        Connects to 'news' database via pyscopg2
+    """
     try:
         connection = psycopg2.connect("dbname={}".format(database))
         cursor = connection.cursor()
@@ -42,6 +51,9 @@ def connect(database="news"):
 
 
 def results(query):
+    """
+        Fetches results from PostgreSQL queries
+    """
     connection, cursor = connect()
     cursor.execute(query)
     return cursor.fetchall()
@@ -49,6 +61,9 @@ def results(query):
 
 
 def print_results(query_results):
+    """
+        Prints results for query1 and query2
+    """
     print(query_results[1])
     for index, results in enumerate(query_results[0]):
         print(str(results[0] + " - " + str(results[1]) + " views."))
@@ -56,9 +71,13 @@ def print_results(query_results):
 
 
 def print_request_errors(query_results):
+    """
+        Prints results for query3
+    """
     print(query_results[1])
     for results in query_results[0]:
-        print(str(str(results[0]) + " - " + str(results[1]) + "% request errors."))
+        print(str(str(results[0]) + " - "
+                  + str(results[1]) + "% request errors."))
 
 
 if __name__ == '__main__':
